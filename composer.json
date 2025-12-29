@@ -1,15 +1,16 @@
 {
     "name": "formacom/mvc",
-    "description": "Framework mvc",
+    "description": "Framework MVC",
     "type": "project",
     "autoload": {
         "psr-4": {
-            "Formacom\\Mvc\\": "src/"
+            "App\\": "app/",
+            "Core\\": "core/"
         }
     },
     "authors": [
         {
-            "name": "Formacom"
+            "name": "mickgv-web"
         }
     ],
     "require": {
