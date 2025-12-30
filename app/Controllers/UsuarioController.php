@@ -8,12 +8,14 @@ use App\Models\Usuario;
 
 class UsuarioController extends Controller
 {
+    protected bool $requiresAuth = true;
+    protected array $publicMethods = ['index'];
+
     /**
      * Lista todos los usuarios usando Eloquent
      */
     public function index(): void
     {
-        // Consulta real a la BBDD
         $usuarios = Usuario::all();
 
         $this->view('usuario/index', [
@@ -24,9 +26,16 @@ class UsuarioController extends Controller
 
     /**
      * Muestra un usuario concreto
+     * El parámetro es opcional para evitar errores fatales
      */
-    public function show(int $id): void
+    public function show(int $id = null): void
     {
+        // Si no se pasa ID → redirigir o lanzar error controlado
+        if ($id === null) {
+            // Puedes redirigir a index o mostrar una vista de error
+            $this->redirect('/usuario/index');
+        }
+
         $usuario = Usuario::find($id);
 
         if (!$usuario) {

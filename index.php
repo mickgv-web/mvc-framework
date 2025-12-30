@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+session_start();
+
 /*
 |--------------------------------------------------------------------------
 | FRONT CONTROLLER
@@ -18,6 +20,8 @@ declare(strict_types=1);
 // -------------------------------------------------
 require_once __DIR__ . '/vendor/autoload.php';
 
+// Cargar configuración
+require_once __DIR__ . '/config.php';
 // -------------------------------------------------
 // 2. Configuración e inicialización de Eloquent
 // -------------------------------------------------

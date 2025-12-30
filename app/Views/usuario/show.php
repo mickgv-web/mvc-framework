@@ -11,5 +11,7 @@
     <p><strong>ID:</strong> <?= $usuario->usuario_id ?></p>
     <p><strong>Nombre:</strong> <?= $usuario->nombre ?></p>
     <p><strong>Email:</strong> <?= $usuario->email ?></p>
+
+    <p><a href="<?= BASE_URL ?>/usuario/index">Volver al listado</a></p>
 </body>
 </html>

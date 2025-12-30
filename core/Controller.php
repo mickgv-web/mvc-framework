@@ -6,6 +6,34 @@ namespace Core;
 class Controller
 {
     /**
+     * Indica si el controlador requiere autenticación.
+     * Por defecto: no.
+     */
+    protected bool $requiresAuth = false;
+
+    /**
+     * Lista de métodos públicos (no requieren login)
+     * Solo se usa si $requiresAuth es true.
+     */
+    protected array $publicMethods = [];
+
+    /**
+     * Getter para saber si el controlador requiere auth.
+     */
+    public function requiresAuth(): bool
+    {
+        return $this->requiresAuth ?? false;
+    }
+
+    /**
+     * Getter para saber qué métodos son públicos.
+     */
+    public function publicMethods(): array
+    {
+        return $this->publicMethods ?? [];
+    }
+
+    /**
      * Carga una vista y le pasa datos
      *
      * @param string $view  Ruta de la vista (sin .php)

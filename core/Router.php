@@ -1,4 +1,5 @@
 <?php
+
 namespace Core;
 
 class Router
@@ -29,6 +30,20 @@ class Router
 
         if (!method_exists($controller, $method)) {
             throw new \Exception("❌ Método $method no existe en $controllerClass");
+        }
+
+        // Gestionar autenticación si es necesario
+        if ($controller->requiresAuth()) {
+
+            // Si el método está en la lista de públicos → dejar pasar
+            if (!in_array($method, $controller->publicMethods(), true)) {
+
+                // Si NO está autenticado → redirigir a login
+                if (!\Core\Auth::check()) {
+                    header("Location: " . BASE_URL . "/auth/login");
+                    exit;
+                }
+            }
         }
 
         // 4. Ejecutar controlador y método

@@ -12,6 +12,7 @@
         <?php foreach ($usuarios as $usuario): ?>
             <li>
                 <?= $usuario->nombre ?> — <?= $usuario->email ?>
+                | <a href="<?= BASE_URL ?>/usuario/show/<?= $usuario->usuario_id ?>">Ver</a>
             </li>
         <?php endforeach; ?>
     </ul>
