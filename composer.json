@@ -3,6 +3,9 @@
     "description": "Framework MVC",
     "type": "project",
     "autoload": {
+        "files": [
+            "helpers/helpers.php"
+        ],
         "psr-4": {
             "App\\": "app/",
             "Core\\": "core/"

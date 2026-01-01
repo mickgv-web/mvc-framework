@@ -21,5 +21,7 @@
 
         <button type="submit">Entrar</button>
     </form>
+
+    <p><a href="<?= url('auth/register') ?>">Registrarse</a></p>
 </body>
 </html>
