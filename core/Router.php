@@ -6,12 +6,12 @@ class Router
 {
     public function dispatch(): void
     {
-        // 1. Obtener la URL
+        // 1. Obtener la URL limpia
         $url = $_GET['url'] ?? '';
         $url = trim($url, '/');
         $segments = $url === '' ? [] : explode('/', $url);
 
-        // 2. Controlador, método y parámetros
+        // 2. Resolver controlador, método y parámetros
         $controllerName = !empty($segments[0])
             ? ucfirst($segments[0]) . 'Controller'
             : 'HomeController';
@@ -23,30 +23,35 @@ class Router
         $controllerClass = 'App\\Controllers\\' . $controllerName;
 
         if (!class_exists($controllerClass)) {
-            throw new \Exception("❌ Controlador no encontrado: $controllerClass");
+            abort(404, "Controlador no encontrado: $controllerClass");
         }
 
         $controller = new $controllerClass();
 
+        // 4. Verificar método
         if (!method_exists($controller, $method)) {
-            throw new \Exception("❌ Método $method no existe en $controllerClass");
+            abort(404, "Método '$method' no existe en $controllerClass");
         }
 
-        // Gestionar autenticación si es necesario
+        // 5. Gestión de autenticación
         if ($controller->requiresAuth()) {
 
-            // Si el método está en la lista de públicos → dejar pasar
+            // Si el método NO es público
             if (!in_array($method, $controller->publicMethods(), true)) {
 
-                // Si NO está autenticado → redirigir a login
+                // Y el usuario NO está autenticado
                 if (!\Core\Auth::check()) {
-                    header("Location: " . BASE_URL . "/auth/login");
-                    exit;
+                    redirect('auth/login');
                 }
             }
         }
 
-        // 4. Ejecutar controlador y método
-        call_user_func_array([$controller, $method], $params);
+        // 6. Ejecutar el método del controlador
+        try {
+            call_user_func_array([$controller, $method], $params);
+        } catch (\Throwable $e) {
+            // Cualquier error interno → 500
+            abort(500, $e->getMessage());
+        }
     }
 }

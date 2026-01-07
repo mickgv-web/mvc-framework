@@ -9,35 +9,61 @@ use App\Models\Usuario;
 
 class AuthController extends Controller
 {
+    protected bool $requiresAuth = false;
+    protected array $publicMethods = ['login', 'register'];
+
     public function login(): void
     {
-        // Si es GET → mostrar formulario
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $this->view('auth/login');
             return;
         }
 
-        // Si es POST → procesar login
-        $email = $_POST['email'] ?? '';
+        $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
 
-        $usuario = Usuario::where('email', $email)->first();
-
-        if (!$usuario || !password_verify($password, $usuario->password)) {
-            $this->view('auth/login', [
-                'error' => 'Credenciales incorrectas'
-            ]);
+        if (!Auth::attempt($email, $password)) {
+            $this->view('auth/login', ['error' => 'Credenciales incorrectas']);
             return;
         }
 
-        Auth::login($usuario->usuario_id);
+        redirect('/');
+    }
 
-        $this->redirect(BASE_URL . '/');
+    public function register(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $this->view('auth/register');
+            return;
+        }
+
+        $nombre = trim($_POST['nombre'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        if ($nombre === '' || $email === '' || $password === '') {
+            $this->view('auth/register', ['error' => 'Todos los campos son obligatorios']);
+            return;
+        }
+
+        if (Usuario::where('email', $email)->exists()) {
+            $this->view('auth/register', ['error' => 'El email ya está registrado']);
+            return;
+        }
+
+        $usuario = Usuario::create([
+            'nombre' => $nombre,
+            'email' => $email,
+            'password' => password_hash($password, PASSWORD_DEFAULT)
+        ]);
+
+        Auth::login($usuario->usuario_id);
+        redirect('/');
     }
 
     public function logout(): void
     {
         Auth::logout();
-        $this->redirect(BASE_URL . '/auth/login');
+        redirect('auth/login');
     }
 }

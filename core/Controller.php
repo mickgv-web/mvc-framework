@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Core;
@@ -22,7 +23,7 @@ class Controller
      */
     public function requiresAuth(): bool
     {
-        return $this->requiresAuth ?? false;
+        return $this->requiresAuth;
     }
 
     /**
@@ -30,7 +31,7 @@ class Controller
      */
     public function publicMethods(): array
     {
-        return $this->publicMethods ?? [];
+        return $this->publicMethods;
     }
 
     /**
@@ -39,27 +40,38 @@ class Controller
      * @param string $view  Ruta de la vista (sin .php)
      * @param array  $data  Datos para la vista
      */
-    protected function view(string $view, array $data = []): void
+    protected function view(string $view, array $data = [], string $layout = 'layouts/main'): void
     {
-        // 1. Convertir array de datos en variables (modo seguro)
         extract($data, EXTR_SKIP);
 
-        // 2. Ruta a la vista
-        $viewFile = dirname(__DIR__) . '/app/Views/' . $view . '.php';
+        $basePath = __DIR__ . '/../app/Views/';
+
+        $viewFile = $basePath . $view . '.php';
 
         if (!file_exists($viewFile)) {
-            throw new \Exception("❌ Vista no encontrada: $view");
+            abort(500, "Vista no encontrada: $view");
         }
 
+        ob_start();
         require $viewFile;
+        $content = ob_get_clean();
+
+        $layoutFile = $basePath . $layout . '.php';
+
+        if (!file_exists($layoutFile)) {
+            abort(500, "Layout no encontrado: $layout");
+        }
+
+        require $layoutFile;
     }
 
+
+
     /**
-     * Redirección HTTP
+     * Redirección HTTP usando helper global
      */
-    protected function redirect(string $url): void
+    protected function redirect(string $path): void
     {
-        header("Location: $url");
-        exit;
+        redirect($path);
     }
 }

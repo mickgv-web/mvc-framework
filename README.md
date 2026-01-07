@@ -1,116 +1,155 @@
 # MVC Framework – Estado Actual del Proyecto
 
-Este proyecto es un mini‑framework MVC en PHP, construido de forma didáctica y progresiva durante el curso.  
-Actualmente incluye:
+Mini‑framework MVC en PHP desarrollado de forma didáctica y progresiva durante el curso.  
+El objetivo es construir una base clara, modular y extensible que permita crear aplicaciones web con un flujo MVC clásico y una arquitectura limpia.
 
-- Router simple y funcional  
+---
+
+## Características actuales
+
+- Router simple y estable  
 - Controladores con protección opcional por sesión  
 - Sistema básico de autenticación (login, logout, registro)  
-- Vistas organizadas por carpetas  
+- Vistas organizadas por módulos  
 - Modelos Eloquent para acceso a base de datos  
-- Flujo de trabajo claro y coherente con MVC clásico  
+- Helpers globales para URL, redirecciones y errores  
+- Flujo MVC completo y coherente  
+- Estructura clara y fácil de extender  
 
 ---
 
-## Estructura del proyecto (simplificada)
+## Estructura del proyecto
 
-/app
-/Controllers
-AuthController.php
-UsuarioController.php
-/Models
-Usuario.php
-/Views
-/auth
-login.php
-register.php
-/usuario
-index.php
-show.php
-
-/core
-Router.php
-Controller.php
-Auth.php
-
-index.php
-
-Código
+mvc-framework  
+├── README.md  
+├── app  
+│   ├── Controllers  
+│   │   ├── AuthController.php  
+│   │   ├── HomeController.php  
+│   │   └── UsuarioController.php  
+│   ├── Models  
+│   │   ├── Contacto.php  
+│   │   └── Usuario.php  
+│   └── Views  
+│       ├── auth  
+│       │   ├── login.php  
+│       │   └── register.php  
+│       ├── home  
+│       │   └── index.php  
+│       ├── layouts  
+│       │   └── main.php  
+│       ├── partials  
+│       │   ├── footer.php  
+│       │   └── header.php  
+│       └── usuario  
+│           ├── index.php  
+│           └── show.php  
+├── bootstrap  
+│   └── database.php  
+├── composer.json  
+├── composer.lock  
+├── config  
+│   ├── app.php  
+│   └── database.php  
+├── config.php  
+├── core  
+│   ├── Auth.php  
+│   ├── Controller.php  
+│   └── Router.php  
+├── helpers  
+│   └── helpers.php  
+├── index.php  
+└── sql  
+    └── schema.sql  
 
 ---
 
-## Funcionamiento del Router
+## Router
 
-El Router interpreta la URL en formato:
+El Router interpreta URLs con el formato:
 
 /controlador/método/param1/param2/...
 
-Código
-
 Ejemplo:
 
-/usuario/show/5
+/usuario/show/5  
+→ Ejecuta: UsuarioController@show(5)
 
-Código
-
-→ UsuarioController@show(5)
-
-El Router también gestiona la protección de rutas:
+### Protección de rutas
 
 Cada controlador puede definir:
 
-protected bool $requiresAuth = true;
+protected bool $requiresAuth = true;  
 protected array $publicMethods = ['index'];
 
-Código
-
-Si un método no está en `publicMethods` y el usuario no está logueado → redirección a `/auth/login`.
+Si requiresAuth es true y el método no está en publicMethods y el usuario no está autenticado → redirección a /auth/login.
 
 ---
 
 ## Sistema de Autenticación
 
-Implementado en:
+Implementado mediante:
 
 - AuthController → login, logout, register  
-- Auth → gestión de sesión (check, login, logout)  
-- index.php → session_start() para activar sesiones  
+- Core\Auth → gestión de sesión  
+- index.php → session_start()  
 
-Flujo actual:
+Flujo:
 
-1. Usuario visita `/auth/login`  
+1. Usuario visita /auth/login  
 2. Si POST → se valida email/contraseña  
 3. Si correcto → Auth::login() guarda user_id en sesión  
 4. Rutas protegidas verifican Auth::check()  
 5. Logout elimina la sesión  
 
-También se añadió registro para facilitar pruebas.
+Incluye registro básico para facilitar pruebas.
 
 ---
 
 ## Controladores actuales
 
-### AuthController
-- login()
-- logout()
-- register()
+AuthController  
 
-### UsuarioController
-- index() → público
-- show($id) → protegido
+- login()  
+- logout()  
+- register()  
+
+UsuarioController
+
+- index() → público  
+- show($id) → protegido  
+
+HomeController  
+
+- index() → público  
 
 ---
 
 ## Base Controller
 
-Core\Controller ahora incluye:
+Core\Controller ofrece:
 
-- view()
-- redirect()
-- requiresAuth()
-- publicMethods()
+- view()  
+- redirect()  
+- requiresAuth()  
+- publicMethods()  
 
-Esto permite que el Router consulte la configuración sin acceder a propiedades protegidas.
+El Router consulta esta configuración sin acceder a propiedades protegidas.
+
+---
+
+## Helpers globales
+
+Ubicados en helpers/helpers.php y cargados por Composer.
+
+Incluyen:
+
+- url()  
+- asset()  
+- redirect()  
+- abort()  
+
+Disponibles en toda la aplicación sin imports.
 
 ---
 
@@ -119,35 +158,51 @@ Esto permite que el Router consulte la configuración sin acceder a propiedades 
 ✔ Login funcionando  
 ✔ Logout funcionando  
 ✔ Registro funcionando  
-✔ Controladores protegidos por sesión  
+✔ Rutas protegidas por sesión  
 ✔ Métodos públicos dentro de controladores protegidos  
 ✔ Router estable y claro  
-✔ Eloquent funcionando para usuarios  
-✔ Flujo MVC completo y coherente  
-✔ Perfecto para empezar CRUDs reales  
+✔ Eloquent funcionando  
+✔ Helpers globales operativos  
+✔ Flujo MVC completo  
+✔ Listo para CRUDs reales  
 
 ---
 
-# Next Steps (To‑Do)
+## Next Steps (To‑Do)
 
-Estas mejoras están previstas para implementar más adelante:
+1. Flash Messages  
+   Mensajes temporales en sesión para errores, avisos y éxitos.  
+   Base necesaria para mejorar UX y validaciones.
 
-### 1. Flash Messages  
-Mensajes temporales en sesión para errores, avisos y éxitos.
+2. Gestión de errores global  
+   - Página 404  
+   - Página 500  
+   - Handler centralizado de excepciones  
+   Aporta robustez y evita pantallas en blanco.
 
-### 2. Helper de Auth  
-Funciones tipo `auth()->check()` o `auth()->user()`.
+3. Helper de Auth  
+   Funciones tipo auth()->check() y auth()->user() para mejorar expresividad en controladores y vistas.
 
-### 3. Helper de URL  
-Funciones como `url('usuario/show/5')` o `asset('css/style.css')`.
+4. Validación mejorada  
+   Reglas más completas para formularios y registro, aprovechando flash messages.
 
-### 4. Gestión de errores global  
-- Página 404  
-- Página 500  
-- Handler centralizado para excepciones  
+5. CRUD completo de usuarios  
+   Crear, editar, actualizar y borrar usuarios.  
+   Primer CRUD real para consolidar el framework.
 
-### 5. Mejoras en validación  
-Validaciones más completas para registro y formularios.
+---
 
-### 6. CRUD completo de usuarios  
-Crear, editar, borrar usuarios con vistas y controladores.
+## Ideas Futuras (Posibles mejoras si escala)
+
+Estas mejoras podrían aportar ergonomía y expresividad sin convertir el framework en algo pesado:
+
+- route() helper para generar URLs por nombre.  
+- view() más flexible (compact, objetos, etc.).  
+- redirect()->with() para flash messages expresivos.  
+- session() helper para leer/escribir sesión de forma más limpia.  
+- dd() y dump() para depuración rápida.  
+- old() para repoblar formularios tras errores.  
+- config() para acceder a configuración con sintaxis simple.  
+- abort_if() y abort_unless() para control de flujo más limpio.  
+- asset_versioned() para cache busting en desarrollo.  
+- partial() para cargar vistas parciales por convención.

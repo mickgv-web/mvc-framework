@@ -6,25 +6,25 @@
     <title>Registro</title>
 </head>
 <body>
-    <h1>Crear cuenta</h1>
+    <h1>Registro</h1>
 
     <?php if (!empty($error)): ?>
         <p style="color:red;"><?= $error ?></p>
     <?php endif; ?>
 
     <form method="POST" action="<?= BASE_URL ?>/auth/register">
-        <label>Nombre:</label>
-        <input type="text" name="nombre" required>
+        <label>Nombre:</label><br>
+        <input type="text" name="nombre"><br><br>
 
-        <label>Email:</label>
-        <input type="email" name="email" required>
+        <label>Email:</label><br>
+        <input type="email" name="email"><br><br>
 
-        <label>Contraseña:</label>
-        <input type="password" name="password" required>
+        <label>Contraseña:</label><br>
+        <input type="password" name="password"><br><br>
 
-        <button type="submit">Registrarse</button>
+        <button type="submit">Crear cuenta</button>
     </form>
 
-    <p><a href="<?= BASE_URL ?>/auth/login">Ya tengo cuenta</a></p>
+    <p><a href="<?= url('auth/login') ?>">Volver al login</a></p>
 </body>
 </html>

@@ -1,37 +1,23 @@
 <?php
 declare(strict_types=1);
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 session_start();
 
-/*
-|--------------------------------------------------------------------------
-| FRONT CONTROLLER
-|--------------------------------------------------------------------------
-| Punto único de entrada de la aplicación
-| Inicializa:
-|  - Autoload de Composer
-|  - ORM Eloquent
-|  - Router
-|--------------------------------------------------------------------------
-*/
-
-// -------------------------------------------------
-// 1. Autoload de Composer
-// -------------------------------------------------
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Cargar configuración
+// Cargar las constantes clásicas 
 require_once __DIR__ . '/config.php';
-// -------------------------------------------------
-// 2. Configuración e inicialización de Eloquent
-// -------------------------------------------------
 
-$dbConfig = require_once __DIR__ . '/config/database.php';
+// Configuración de la aplicación
+require_once __DIR__ . '/config/app.php';
 
-// -------------------------------------------------
-// 3. Arranque del Router
-// -------------------------------------------------
-require_once __DIR__ . '/core/Router.php';
+// Inicialización de servicios
+require_once __DIR__ . '/bootstrap/database.php';
 
 use Core\Router;
 
