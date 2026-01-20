@@ -1,27 +1,22 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión</title>
-</head>
-<body>
-    <h1>Iniciar sesión</h1>
+<?php $title = $title ?? 'Iniciar sesión'; ?>
 
-    <?php if (!empty($error)): ?>
-        <p style="color:red;"><?= $error ?></p>
-    <?php endif; ?>
+<h1><?= $title ?></h1>
 
-    <form method="POST" action="<?= BASE_URL ?>/auth/login">
-        <label>Email:</label>
-        <input type="email" name="email" required>
+<?php $error = $error ?? null; ?>
+<?php if ($error): ?>
+    <p style="color:red;"><?= $error ?></p>
+<?php endif; ?>
 
-        <label>Contraseña:</label>
-        <input type="password" name="password" required>
+<form method="POST" action="<?= url('auth/login') ?>">
+    <label>Email:</label><br>
+    <input type="email" name="email" required><br><br>
 
-        <button type="submit">Entrar</button>
-    </form>
+    <label>Contraseña:</label><br>
+    <input type="password" name="password" required><br><br>
 
-    <p><a href="<?= url('auth/register') ?>">Registrarse</a></p>
-</body>
-</html>
+    <button type="submit">Entrar</button>
+</form>
+
+<p>
+    <a href="<?= url('auth/register') ?>">Registrarse</a>
+</p>
