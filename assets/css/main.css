@@ -1,0 +1,31 @@
+/* Reset básico para que el layout funcione */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor vertical */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* HEADER sticky */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* por encima del contenido */
+}
+
+/* MAIN empuja el footer hacia abajo */
+main {
+  flex: 1;
+  padding: 2rem 1rem; /* ajusta según tu diseño */
+}
+
+/* FOOTER siempre abajo, pero empujado por el contenido */
+footer {
+  margin-top: auto;
+}

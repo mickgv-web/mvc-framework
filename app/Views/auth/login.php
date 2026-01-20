@@ -1,22 +1,33 @@
 <?php $title = $title ?? 'Iniciar sesión'; ?>
 
-<h1><?= $title ?></h1>
+<h2 class="ui header"><?= $title ?></h2>
 
-<?php $error = $error ?? null; ?>
-<?php if ($error): ?>
-    <p style="color:red;"><?= $error ?></p>
+<?php if (!empty($error)): ?>
+    <div class="ui negative message">
+        <div class="header">Error</div>
+        <p><?= $error ?></p>
+    </div>
 <?php endif; ?>
 
-<form method="POST" action="<?= url('auth/login') ?>">
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+<form class="ui form" method="POST" action="<?= url('auth/login') ?>">
 
-    <label>Contraseña:</label><br>
-    <input type="password" name="password" required><br><br>
+    <div class="field">
+        <label>Email</label>
+        <input type="email" name="email" required>
+    </div>
 
-    <button type="submit">Entrar</button>
+    <div class="field">
+        <label>Contraseña</label>
+        <input type="password" name="password" required>
+    </div>
+
+    <button class="ui primary button" type="submit">
+        Entrar
+    </button>
 </form>
 
-<p>
-    <a href="<?= url('auth/register') ?>">Registrarse</a>
-</p>
+<div class="ui divider"></div>
+
+<a href="<?= url('auth/register') ?>" class="ui small button">
+    Crear cuenta
+</a>

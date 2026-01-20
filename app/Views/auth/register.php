@@ -1,25 +1,38 @@
 <?php $title = $title ?? 'Registro'; ?>
 
-<h1><?= $title ?></h1>
+<h2 class="ui header"><?= $title ?></h2>
 
-<?php $error = $error ?? null; ?>
-<?php if ($error): ?>
-    <p style="color:red;"><?= $error ?></p>
+<?php if (!empty($error)): ?>
+    <div class="ui negative message">
+        <div class="header">Error</div>
+        <p><?= $error ?></p>
+    </div>
 <?php endif; ?>
 
-<form method="POST" action="<?= url('auth/register') ?>">
-    <label>Nombre:</label><br>
-    <input type="text" name="nombre" required><br><br>
+<form class="ui form" method="POST" action="<?= url('auth/register') ?>">
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+    <div class="field">
+        <label>Nombre</label>
+        <input type="text" name="nombre" required>
+    </div>
 
-    <label>Contraseña:</label><br>
-    <input type="password" name="password" required><br><br>
+    <div class="field">
+        <label>Email</label>
+        <input type="email" name="email" required>
+    </div>
 
-    <button type="submit">Crear cuenta</button>
+    <div class="field">
+        <label>Contraseña</label>
+        <input type="password" name="password" required>
+    </div>
+
+    <button class="ui primary button" type="submit">
+        Crear cuenta
+    </button>
 </form>
 
-<p>
-    <a href="<?= url('auth/login') ?>">Volver al login</a>
-</p>
+<div class="ui divider"></div>
+
+<a href="<?= url('auth/login') ?>" class="ui small button">
+    Volver al login
+</a>
